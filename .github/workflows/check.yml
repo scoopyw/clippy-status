@@ -1,5 +1,12 @@
 name: Check
 
+# GitHub's own schedule is best effort and on this repository it did not fire
+# at all for hours, so a run does not check once and stop: it checks every five
+# minutes for close to six hours (the limit for one job) and then starts the
+# next run itself. workflow_dispatch is the one event a run may start with its
+# own token. The schedule stays as a safety net: if the chain ever breaks, the
+# next scheduled run picks it up again, and the concurrency group keeps it to
+# one loop at a time.
 on:
   schedule:
     - cron: '1-59/5 * * * *'
@@ -8,6 +15,7 @@ on:
 permissions:
   contents: write
   issues: write
+  actions: write
 
 concurrency:
   group: check
@@ -16,23 +24,35 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Check every service
-        run: node scripts/check.mjs
+      - name: Check every five minutes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Save the results
         run: |
           git config user.name "clippy-status"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data
-          git diff --cached --quiet && exit 0
-          git commit -q -m "check $(date -u +%Y-%m-%dT%H:%MZ)"
-          for i in 1 2 3; do git pull -q --rebase && git push -q && exit 0; sleep 5; done
-          exit 1
+          started=$(date +%s)
+          while :; do
+            git pull -q --rebase || true
+            node scripts/check.mjs || echo "check failed, trying again next round"
+            git add data
+            if ! git diff --cached --quiet; then
+              git commit -q -m "check $(date -u +%Y-%m-%dT%H:%MZ)"
+              for i in 1 2 3; do git pull -q --rebase && git push -q && break; sleep 5; done
+            fi
+            now=$(date +%s)
+            # Stop with room to spare before the job limit.
+            [ $((now - started)) -gt $((340 * 60)) ] && break
+            sleep $((300 - now % 300 + 30))
+          done
+      - name: Start the next run
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run check.yml --ref main -R "$GITHUB_REPOSITORY"
