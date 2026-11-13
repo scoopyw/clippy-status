@@ -1,0 +1,71 @@
+[
+  {
+    "id": "website",
+    "group": "Clippy",
+    "name": "Website",
+    "about": "clippy.gg, clip pages and profiles",
+    "url": "https://clippy.gg/",
+    "expect": "200"
+  },
+  {
+    "id": "api",
+    "group": "Clippy",
+    "name": "App API",
+    "about": "What the desktop app talks to: sharing, game names, your account",
+    "url": "https://clippy.gg/api/game-fixes",
+    "expect": "200",
+    "json": true
+  },
+  {
+    "id": "signin",
+    "group": "Clippy",
+    "name": "Sign-in",
+    "about": "Signing in on clippy.gg and from the app",
+    "url": "https://clippy.gg/login",
+    "expect": "200"
+  },
+  {
+    "id": "updates",
+    "group": "Clippy",
+    "name": "App updates",
+    "about": "The update check every Clippy install makes",
+    "url": "https://clippy.gg/downloads/latest.json",
+    "expect": "200",
+    "json": "version"
+  },
+  {
+    "id": "updates-legacy",
+    "group": "Clippy",
+    "name": "Updates for older versions",
+    "about": "The same check for installs older than 0.7.14 (clippy.rip)",
+    "url": "https://clippy.rip/downloads/latest.json",
+    "expect": "200",
+    "json": "version"
+  },
+  {
+    "id": "cdn",
+    "group": "Clippy",
+    "name": "Clip playback",
+    "about": "Where shared clips are stored and played from",
+    "url": "https://cdn.clippy.gg/",
+    "expect": "<500",
+    "method": "HEAD"
+  },
+  {
+    "id": "goob",
+    "group": "goob",
+    "name": "goob.wtf",
+    "about": "The goob website",
+    "url": "https://goob.wtf/",
+    "expect": "200"
+  },
+  {
+    "id": "goob-bot",
+    "group": "goob",
+    "name": "goob live numbers",
+    "about": "The numbers on goob.wtf, refreshed every few minutes",
+    "url": "https://goob.wtf/stats.json",
+    "expect": "200",
+    "fresh": { "field": "generated_at", "minutes": 30 }
+  }
+]

@@ -1,0 +1,69 @@
+{
+  "checkedAt": "2026-11-13T19:51:41.371Z",
+  "services": [
+    {
+      "id": "website",
+      "status": "up",
+      "code": 200,
+      "ms": 389,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "api",
+      "status": "up",
+      "code": 200,
+      "ms": 227,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "signin",
+      "status": "up",
+      "code": 200,
+      "ms": 231,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "updates",
+      "status": "up",
+      "code": 200,
+      "ms": 150,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "updates-legacy",
+      "status": "up",
+      "code": 200,
+      "ms": 149,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "cdn",
+      "status": "up",
+      "code": 404,
+      "ms": 190,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "goob",
+      "status": "up",
+      "code": 200,
+      "ms": 118,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "goob-bot",
+      "status": "up",
+      "code": 200,
+      "ms": 162,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    }
+  ]
+}

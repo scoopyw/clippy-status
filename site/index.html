@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clippy Status</title>
+<meta name="description" content="Is clippy.gg up? Live status of the Clippy website, app API, sign-in, updates and clip playback, checked every five minutes." />
+<link rel="icon" type="image/png" href="favicon.png" />
+<link rel="icon" type="image/svg+xml" href="icon.svg" />
+<meta name="theme-color" content="#0d0b12" />
+<meta property="og:title" content="Clippy Status" />
+<meta property="og:description" content="Live status of clippy.gg, the Clippy app's services and clip playback." />
+<meta property="og:url" content="https://status.clippy.gg/" />
+<style>
+  :root {
+    --bg: #0d0b12;
+    --surface: #14121c;
+    --surface-2: #1a1723;
+    --border: #2a263b;
+    --fg: #f2f0f9;
+    --muted: #a8a3bd;
+    --subtle: #8e89a4;
+    --violet: #7c5de5;
+    --violet-soft: #b5a3f0;
+    --up: #6ee7b7;
+    --up-bar: #34d399;
+    --up-soft: #10281f;
+    --up-border: #1f4d38;
+    --slow: #fcd34d;
+    --slow-bar: #f5b83d;
+    --slow-soft: #2b2210;
+    --slow-border: #5a4614;
+    --down: #fda4af;
+    --down-bar: #f87171;
+    --down-soft: #2b1418;
+    --down-border: #5c2229;
+    --none-bar: #2a263b;
+    --logo: url("logo-white.svg");
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f7f6fb;
+      --surface: #ffffff;
+      --surface-2: #f1eff8;
+      --border: #e3dff0;
+      --fg: #14121c;
+      --muted: #5c5770;
+      --subtle: #6f6a84;
+      --violet: #6a4bdb;
+      --violet-soft: #5a37cd;
+      --up: #047857;
+      --up-bar: #10b981;
+      --up-soft: #ecfdf5;
+      --up-border: #a7f3d0;
+      --slow: #92400e;
+      --slow-bar: #f59e0b;
+      --slow-soft: #fffbeb;
+      --slow-border: #fde68a;
+      --down: #b91c1c;
+      --down-bar: #ef4444;
+      --down-soft: #fef2f2;
+      --down-border: #fecaca;
+      --none-bar: #e3dff0;
+      --logo: url("logo-black.svg");
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--bg); }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--violet-soft); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .wrap { max-width: 820px; margin: 0 auto; padding: 0 16px; }
+
+  header { display: flex; align-items: center; justify-content: space-between; padding: 28px 0 32px; }
+  .brand { display: flex; align-items: center; gap: 12px; color: var(--fg); }
+  .brand:hover { text-decoration: none; }
+  .brand .logo { width: 104px; height: 27px; background: var(--logo) left center / contain no-repeat; }
+  .brand .tag { font-size: 13px; font-weight: 600; color: var(--muted); border-left: 1px solid var(--border); padding-left: 12px; }
+  header nav a { font-size: 14px; font-weight: 500; }
+
+  .banner {
+    display: flex; align-items: center; gap: 16px;
+    padding: 22px 24px; border-radius: 16px;
+    border: 1px solid var(--up-border); background: var(--up-soft);
+  }
+  .banner.slow { border-color: var(--slow-border); background: var(--slow-soft); }
+  .banner.down { border-color: var(--down-border); background: var(--down-soft); }
+  .banner.unknown { border-color: var(--border); background: var(--surface); }
+  .banner h1 { font-size: 20px; font-weight: 650; line-height: 1.25; }
+  .banner p { color: var(--muted); font-size: 14px; margin-top: 2px; }
+  .orb { flex: none; width: 14px; height: 14px; border-radius: 50%; background: var(--up-bar); box-shadow: 0 0 0 5px color-mix(in srgb, var(--up-bar) 22%, transparent); }
+  .slow .orb { background: var(--slow-bar); box-shadow: 0 0 0 5px color-mix(in srgb, var(--slow-bar) 22%, transparent); }
+  .down .orb { background: var(--down-bar); box-shadow: 0 0 0 5px color-mix(in srgb, var(--down-bar) 22%, transparent); }
+  .unknown .orb { background: var(--subtle); box-shadow: none; }
+
+  section { margin-top: 36px; }
+  h2 { font-size: 13px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: var(--subtle); margin-bottom: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
+  .svc { padding: 18px 22px; }
+  .svc + .svc { border-top: 1px solid var(--border); }
+  .svc-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .svc-name { font-weight: 600; }
+  .svc-about { color: var(--subtle); font-size: 13px; }
+  .pill { flex: none; font-size: 12.5px; font-weight: 600; padding: 3px 10px; border-radius: 999px; color: var(--up); background: var(--up-soft); border: 1px solid var(--up-border); white-space: nowrap; }
+  .pill.slow { color: var(--slow); background: var(--slow-soft); border-color: var(--slow-border); }
+  .pill.down { color: var(--down); background: var(--down-soft); border-color: var(--down-border); }
+  .pill.unknown { color: var(--muted); background: var(--surface-2); border-color: var(--border); }
+  .bars { display: flex; gap: 2px; height: 30px; margin-top: 14px; }
+  .bar { flex: 1; border-radius: 2px; background: var(--none-bar); min-width: 2px; cursor: default; outline: none; }
+  .bar.up { background: var(--up-bar); }
+  .bar.slow { background: var(--slow-bar); }
+  .bar.down { background: var(--down-bar); }
+  .bar:hover, .bar:focus-visible { filter: brightness(1.25); }
+  .bar-foot { display: flex; justify-content: space-between; color: var(--subtle); font-size: 12px; margin-top: 6px; }
+  .bar-foot b { color: var(--muted); font-weight: 600; }
+
+  .incident { padding: 18px 22px; }
+  .incident + .incident { border-top: 1px solid var(--border); }
+  .incident-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  .incident-title { font-weight: 600; }
+  .incident-title.ongoing { color: var(--down); }
+  .incident-when { color: var(--subtle); font-size: 13px; }
+  .incident p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .empty { padding: 18px 22px; color: var(--muted); }
+
+  footer { color: var(--subtle); font-size: 13px; padding: 40px 0 56px; text-align: center; }
+  footer p + p { margin-top: 4px; }
+
+  #tip {
+    position: fixed; z-index: 10; pointer-events: none; opacity: 0;
+    background: var(--surface-2); border: 1px solid var(--border); color: var(--fg);
+    border-radius: 10px; padding: 8px 10px; font-size: 12.5px; line-height: 1.4;
+    box-shadow: 0 10px 24px -12px rgba(0,0,0,.5); transition: opacity .1s;
+    max-width: 220px;
+  }
+  #tip b { display: block; }
+  #tip span { color: var(--muted); }
+
+  @media (max-width: 560px) {
+    header { padding: 20px 0 22px; }
+    .brand .tag { display: none; }
+    .banner { padding: 18px; }
+    .banner h1 { font-size: 18px; }
+    .svc, .incident, .empty { padding: 16px; }
+    .bars { height: 26px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="brand" href="https://clippy.gg/" aria-label="Clippy home">
+        <span class="logo" role="img" aria-label="Clippy"></span>
+        <span class="tag">Status</span>
+      </a>
+      <nav><a href="https://clippy.gg/">clippy.gg &rarr;</a></nav>
+    </header>
+
+    <div id="banner" class="banner unknown" role="status" aria-live="polite">
+      <span class="orb" aria-hidden="true"></span>
+      <div>
+        <h1 id="banner-title">Checking&hellip;</h1>
+        <p id="banner-sub">Loading the latest checks.</p>
+      </div>
+    </div>
+
+    <div id="groups"></div>
+
+    <section>
+      <h2>Incidents</h2>
+      <div class="card" id="incidents"><div class="empty">Loading&hellip;</div></div>
+    </section>
+
+    <footer>
+      <p>Checked from outside our own server every five minutes, so this page stays up when we don't.</p>
+      <p>Recording in the Clippy app works offline and does not depend on any of this.</p>
+    </footer>
+  </div>
+  <div id="tip" role="tooltip"></div>
+
+<script>
+(function () {
+  // Live data comes straight from the repository, so the page never needs a
+  // redeploy to show a new check. Served from anywhere else (a local preview),
+  // it reads the files next to it.
+  var REPO_RAW = 'https://raw.githubusercontent.com/scoopyw/clippy-status/main/';
+  var BASE = /github\.io$|status\.clippy\.gg$/.test(location.hostname) ? REPO_RAW : '../';
+  var STALE_MIN = 20;
+
+  var LABEL = { up: 'Working', slow: 'Slow', down: 'Down', unknown: 'No data' };
+
+  function get(p) {
+    return fetch(BASE + p + '?t=' + Math.floor(Date.now() / 60000), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
+  }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function ago(iso) {
+    var m = Math.round((Date.now() - Date.parse(iso)) / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return m + ' min ago';
+    var h = Math.round(m / 60);
+    if (h < 48) return h + ' h ago';
+    return Math.round(h / 24) + ' days ago';
+  }
+  function dur(a, b) {
+    var m = Math.max(1, Math.round((Date.parse(b) - Date.parse(a)) / 60000));
+    if (m < 60) return m + ' min';
+    var h = Math.floor(m / 60), r = m % 60;
+    return h + ' h' + (r ? ' ' + r + ' min' : '');
+  }
+  function day(iso) {
+    return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+  function time(iso) {
+    return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
+  function pct(n) {
+    if (n >= 99.995) return '100%';
+    return (Math.floor(n * 100) / 100).toFixed(2) + '%';
+  }
+  function isoDay(d) { return d.toISOString().slice(0, 10); }
+
+  var tip = document.getElementById('tip');
+  function showTip(target, html) {
+    tip.innerHTML = html;
+    var r = target.getBoundingClientRect();
+    tip.style.opacity = '1';
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var x = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), innerWidth - w - 8);
+    var y = r.top - h - 8;
+    if (y < 8) y = r.bottom + 8;
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+  function hideTip() { tip.style.opacity = '0'; }
+
+  var state = null;
+
+  function render() {
+    if (!state) return;
+    var services = state.services, current = state.current, history = state.history, incidents = state.incidents;
+    var byId = {};
+    (current.services || []).forEach(function (s) { byId[s.id] = s; });
+    var stale = !current.checkedAt || (Date.now() - Date.parse(current.checkedAt)) / 60000 > STALE_MIN;
+
+    // Banner
+    var downs = services.filter(function (s) { return byId[s.id] && byId[s.id].status === 'down'; });
+    var slows = services.filter(function (s) { return byId[s.id] && byId[s.id].status === 'slow'; });
+    var banner = document.getElementById('banner');
+    var title = document.getElementById('banner-title');
+    var sub = document.getElementById('banner-sub');
+    var kind = downs.length ? 'down' : slows.length ? 'slow' : 'up';
+    if (downs.length === services.length) title.textContent = 'Clippy is down. We are on it.';
+    else if (downs.length) title.textContent = downs.map(function (s) { return s.name; }).join(', ') + (downs.length === 1 ? ' is down' : ' are down');
+    else if (slows.length) title.textContent = slows.map(function (s) { return s.name; }).join(', ') + (slows.length === 1 ? ' is slow right now' : ' are slow right now');
+    else title.textContent = 'Everything is working';
+    sub.textContent = current.checkedAt
+      ? (stale ? 'The checks are running late. Last check ' + ago(current.checkedAt) + '.' : 'Last checked ' + ago(current.checkedAt) + '.')
+      : 'No checks yet.';
+    if (!current.checkedAt) kind = 'unknown';
+    banner.className = 'banner ' + kind;
+
+    // Services, grouped
+    var days = innerWidth < 560 ? 30 : 90;
+    var today = new Date();
+    var list = [];
+    for (var i = days - 1; i >= 0; i--) list.push(isoDay(new Date(today.getTime() - i * 86400000)));
+
+    var groups = document.getElementById('groups');
+    groups.textContent = '';
+    var order = [];
+    services.forEach(function (s) { if (order.indexOf(s.group) < 0) order.push(s.group); });
+    order.forEach(function (g) {
+      var sec = el('section');
+      sec.appendChild(el('h2', null, g));
+      var card = el('div', 'card');
+      services.filter(function (s) { return s.group === g; }).forEach(function (s) {
+        var cur = byId[s.id];
+        var status = cur ? cur.status : 'unknown';
+        var row = el('div', 'svc');
+        var head = el('div', 'svc-head');
+        var left = el('div');
+        left.appendChild(el('div', 'svc-name', s.name));
+        left.appendChild(el('div', 'svc-about', s.about));
+        head.appendChild(left);
+        var pill = el('span', 'pill ' + status, LABEL[status]);
+        if (cur && status === 'down' && cur.since) pill.title = 'Since ' + time(cur.since) + (cur.why ? ' (' + cur.why + ')' : '');
+        head.appendChild(pill);
+        row.appendChild(head);
+
+        var h = history[s.id] || {};
+        var bars = el('div', 'bars');
+        var total = 0, up = 0;
+        list.forEach(function (d) {
+          var b = h[d];
+          var bar = el('span', 'bar');
+          bar.tabIndex = 0;
+          var html;
+          if (b && b.total) {
+            total += b.total; up += b.up;
+            var p = 100 * b.up / b.total;
+            bar.className = 'bar ' + (p >= 99.5 ? 'up' : p >= 95 ? 'slow' : 'down');
+            var avg = b.up ? Math.round(b.ms / b.up) : null;
+            html = '<b>' + day(d) + '</b><span>' + pct(p) + ' up' + (avg ? ', ' + avg + ' ms on average' : '') + '</span>';
+          } else {
+            html = '<b>' + day(d) + '</b><span>No checks this day</span>';
+          }
+          bar.setAttribute('aria-label', html.replace(/<[^>]+>/g, ' ').trim());
+          bar.addEventListener('mouseenter', function () { showTip(bar, html); });
+          bar.addEventListener('focus', function () { showTip(bar, html); });
+          bar.addEventListener('mouseleave', hideTip);
+          bar.addEventListener('blur', hideTip);
+          bars.appendChild(bar);
+        });
+        row.appendChild(bars);
+        var foot = el('div', 'bar-foot');
+        foot.appendChild(el('span', null, days + ' days ago'));
+        var mid = el('span');
+        if (total) { var bb = el('b', null, pct(100 * up / total)); mid.appendChild(bb); mid.appendChild(document.createTextNode(' up')); }
+        else mid.textContent = 'Not enough checks yet';
+        foot.appendChild(mid);
+        foot.appendChild(el('span', null, 'Today'));
+        row.appendChild(foot);
+        card.appendChild(row);
+      });
+      sec.appendChild(card);
+      groups.appendChild(sec);
+    });
+
+    // Incidents, newest first, last 30 days plus anything still open
+    var names = {};
+    services.forEach(function (s) { names[s.id] = s.name; });
+    var since = Date.now() - 30 * 86400000;
+    var shown = incidents.filter(function (x) { return !x.end || Date.parse(x.start) > since; })
+      .sort(function (a, b) { return Date.parse(b.start) - Date.parse(a.start); });
+    var box = document.getElementById('incidents');
+    box.textContent = '';
+    if (!shown.length) { box.appendChild(el('div', 'empty', 'No incidents in the last 30 days.')); return; }
+    shown.forEach(function (x) {
+      var row = el('div', 'incident');
+      var head = el('div', 'incident-head');
+      var t = x.title || ((names[x.service] || x.service) + (x.end ? ' was down' : ' is down'));
+      head.appendChild(el('div', 'incident-title' + (x.end ? '' : ' ongoing'), t));
+      head.appendChild(el('div', 'incident-when',
+        day(x.start) + ', ' + time(x.start) + (x.end ? ' to ' + time(x.end) + ' (' + dur(x.start, x.end) + ')' : ', ongoing for ' + dur(x.start, new Date().toISOString()))));
+      row.appendChild(head);
+      var note = x.note || (x.why ? 'Reason seen from outside: ' + x.why + '.' : '');
+      if (note) row.appendChild(el('p', null, note));
+      box.appendChild(row);
+    });
+  }
+
+  function load() {
+    Promise.all([get('services.json'), get('data/current.json'), get('data/history.json'), get('data/incidents.json')])
+      .then(function (r) {
+        state = { services: r[0], current: r[1], history: r[2], incidents: r[3] };
+        render();
+      })
+      .catch(function () {
+        if (state) return;
+        document.getElementById('banner-title').textContent = 'Could not load the status';
+        document.getElementById('banner-sub').textContent = 'Try again in a minute.';
+        document.getElementById('incidents').innerHTML = '<div class="empty">Not available right now.</div>';
+      });
+  }
+
+  load();
+  setInterval(load, 60000);
+  var last = innerWidth < 560;
+  addEventListener('resize', function () { var n = innerWidth < 560; if (n !== last) { last = n; render(); } });
+})();
+</script>
+</body>
+</html>

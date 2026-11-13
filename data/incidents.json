@@ -1,0 +1,18 @@
+[
+  {
+    "id": "server-2026-11-13",
+    "title": "Server outage",
+    "services": [
+      "website",
+      "api",
+      "signin",
+      "updates",
+      "updates-legacy",
+      "goob",
+      "goob-bot"
+    ],
+    "start": "2026-11-13T19:06:00Z",
+    "end": "2026-11-13T19:21:00Z",
+    "note": "The server behind clippy.gg froze and had to be restarted. Recording in the app kept working the whole time. Sharing, sign-in and update checks were unavailable for about 15 minutes."
+  }
+]
