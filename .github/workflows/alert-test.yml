@@ -17,5 +17,5 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
           [ -n "$DISCORD_WEBHOOK" ] || { echo "DISCORD_WEBHOOK is not set"; exit 1; }
-          curl -sf -H 'content-type: application/json' "$DISCORD_WEBHOOK" -d '{"username":"Clippy status","allowed_mentions":{"parse":[]},"content":"Test from status.clippy.gg: alerts land here. When a service stays down for two checks in a row, this channel hears it, and again when it is back. https://status.clippy.gg"}'
+          curl -sf -H 'content-type: application/json' "$DISCORD_WEBHOOK" -d '{"username":"Clippy status","allowed_mentions":{"parse":[]},"content":"Test from status.clippy.gg: alerts land here. When a service is down and stays down after two retries, this channel hears it, and again when it is back. https://status.clippy.gg"}'
           echo posted
