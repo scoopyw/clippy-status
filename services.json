@@ -50,22 +50,5 @@
     "url": "https://cdn.clippy.gg/",
     "expect": "<500",
     "method": "HEAD"
-  },
-  {
-    "id": "goob",
-    "group": "goob",
-    "name": "goob.wtf",
-    "about": "The goob website",
-    "url": "https://goob.wtf/",
-    "expect": "200"
-  },
-  {
-    "id": "goob-bot",
-    "group": "goob",
-    "name": "goob live numbers",
-    "about": "The numbers on goob.wtf, refreshed every few minutes",
-    "url": "https://goob.wtf/stats.json",
-    "expect": "200",
-    "fresh": { "field": "generated_at", "minutes": 30 }
   }
 ]
