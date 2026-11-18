@@ -1,24 +1,8 @@
 {
-  "checkedAt": "2026-11-18T14:15:30.341Z",
+  "checkedAt": "2026-11-18T14:20:31.267Z",
   "services": [
     {
       "id": "website",
-      "status": "up",
-      "code": 200,
-      "ms": 1239,
-      "why": "",
-      "since": "2026-11-13T19:51:41.371Z"
-    },
-    {
-      "id": "api",
-      "status": "up",
-      "code": 200,
-      "ms": 1038,
-      "why": "",
-      "since": "2026-11-13T19:51:41.371Z"
-    },
-    {
-      "id": "signin",
       "status": "up",
       "code": 200,
       "ms": 1006,
@@ -26,10 +10,26 @@
       "since": "2026-11-13T19:51:41.371Z"
     },
     {
+      "id": "api",
+      "status": "up",
+      "code": 200,
+      "ms": 724,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "signin",
+      "status": "up",
+      "code": 200,
+      "ms": 828,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
       "id": "updates",
       "status": "up",
       "code": 200,
-      "ms": 896,
+      "ms": 645,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     },
@@ -37,7 +37,7 @@
       "id": "updates-legacy",
       "status": "up",
       "code": 200,
-      "ms": 1153,
+      "ms": 1140,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     },
@@ -45,7 +45,7 @@
       "id": "cdn",
       "status": "up",
       "code": 404,
-      "ms": 564,
+      "ms": 376,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     }
