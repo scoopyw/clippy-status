@@ -1,51 +1,51 @@
 {
-  "checkedAt": "2026-11-19T05:55:31.183Z",
+  "checkedAt": "2026-11-19T06:00:30.839Z",
   "services": [
     {
       "id": "website",
-      "status": "slow",
+      "status": "up",
       "code": 200,
-      "ms": 5888,
+      "ms": 786,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     },
     {
       "id": "api",
-      "status": "slow",
+      "status": "up",
       "code": 200,
-      "ms": 5664,
+      "ms": 686,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     },
     {
       "id": "signin",
-      "status": "slow",
+      "status": "up",
       "code": 200,
-      "ms": 5658,
+      "ms": 643,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     },
     {
       "id": "updates",
-      "status": "slow",
+      "status": "up",
       "code": 200,
-      "ms": 5568,
+      "ms": 530,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     },
     {
       "id": "updates-legacy",
-      "status": "slow",
+      "status": "up",
       "code": 200,
-      "ms": 5971,
+      "ms": 511,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     },
     {
       "id": "cdn",
-      "status": "slow",
+      "status": "up",
       "code": 404,
-      "ms": 5319,
+      "ms": 217,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     }
