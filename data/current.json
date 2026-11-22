@@ -1,40 +1,8 @@
 {
-  "checkedAt": "2026-11-22T18:30:31.256Z",
+  "checkedAt": "2026-11-22T18:35:30.945Z",
   "services": [
     {
       "id": "website",
-      "status": "up",
-      "code": 200,
-      "ms": 1030,
-      "why": "",
-      "since": "2026-11-13T19:51:41.371Z"
-    },
-    {
-      "id": "api",
-      "status": "up",
-      "code": 200,
-      "ms": 730,
-      "why": "",
-      "since": "2026-11-13T19:51:41.371Z"
-    },
-    {
-      "id": "signin",
-      "status": "up",
-      "code": 200,
-      "ms": 715,
-      "why": "",
-      "since": "2026-11-13T19:51:41.371Z"
-    },
-    {
-      "id": "updates",
-      "status": "up",
-      "code": 200,
-      "ms": 561,
-      "why": "",
-      "since": "2026-11-13T19:51:41.371Z"
-    },
-    {
-      "id": "updates-legacy",
       "status": "up",
       "code": 200,
       "ms": 978,
@@ -42,10 +10,42 @@
       "since": "2026-11-13T19:51:41.371Z"
     },
     {
+      "id": "api",
+      "status": "up",
+      "code": 200,
+      "ms": 669,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "signin",
+      "status": "up",
+      "code": 200,
+      "ms": 674,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "updates",
+      "status": "up",
+      "code": 200,
+      "ms": 569,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
+      "id": "updates-legacy",
+      "status": "up",
+      "code": 200,
+      "ms": 587,
+      "why": "",
+      "since": "2026-11-13T19:51:41.371Z"
+    },
+    {
       "id": "cdn",
       "status": "up",
       "code": 404,
-      "ms": 338,
+      "ms": 257,
       "why": "",
       "since": "2026-11-13T19:51:41.371Z"
     }
