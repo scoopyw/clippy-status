@@ -1,27 +1,15 @@
 [
   {
-    "id": "signin-2026-11-25T17:25:30.572Z",
-    "service": "signin",
-    "start": "2026-11-25T17:25:30.572Z",
-    "end": "2026-11-25T17:30:31.030Z",
-    "why": "HTTP 503",
-    "issue": 3
-  },
-  {
-    "id": "api-2026-11-25T17:25:30.572Z",
-    "service": "api",
-    "start": "2026-11-25T17:25:30.572Z",
-    "end": "2026-11-25T17:30:31.030Z",
-    "why": "HTTP 503",
-    "issue": 2
-  },
-  {
-    "id": "website-2026-11-25T17:25:30.572Z",
-    "service": "website",
-    "start": "2026-11-25T17:25:30.572Z",
-    "end": "2026-11-25T17:30:31.030Z",
-    "why": "HTTP 503",
-    "issue": 1
+    "id": "server-move-2026-11-25",
+    "title": "Planned maintenance: server move",
+    "services": [
+      "website",
+      "api",
+      "signin"
+    ],
+    "start": "2026-11-25T17:22:00Z",
+    "end": "2026-11-25T17:31:00Z",
+    "note": "Planned work: clippy.gg moved to its own server. Recording and saving clips in the app kept working the whole time. Sharing and sign-in were unavailable for about eight minutes."
   },
   {
     "id": "server-2026-11-13",
